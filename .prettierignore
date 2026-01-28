@@ -1,0 +1,29 @@
+# Prettier ignore patterns
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+
+# Generated files
+*.generated.*
+*.min.js
+*.min.css
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Data files
+*.h5
+*.hdf5
+*.geojson
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+*.log

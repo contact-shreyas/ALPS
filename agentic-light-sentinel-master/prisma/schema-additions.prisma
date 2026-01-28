@@ -1,0 +1,82 @@
+// Add these models to schema.prisma
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum PhaseType {
+  SENSE
+  REASON
+  ACT
+  LEARN
+}
+
+model Source {
+  id           String    @id @default(cuid())
+  name         String
+  kind         String
+  coveragePct  Float
+  lastUpdatedAt DateTime
+  entities     Entity[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([kind])
+}
+
+model Entity {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  name      String
+  region    String
+  tags      Json?
+  sourceId  String
+  source    Source    @relation(fields: [sourceId], references: [id])
+  metrics   Metric[]
+  alerts    Alert[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([region])
+  @@index([sourceId])
+}
+
+model Metric {
+  id           String   @id @default(cuid())
+  entityId     String
+  entity       Entity   @relation(fields: [entityId], references: [id])
+  date         DateTime
+  valueNumeric Float
+  createdAt    DateTime @default(now())
+
+  @@index([entityId])
+  @@index([date])
+}
+
+model Alert {
+  id             String    @id @default(cuid())
+  entityId       String
+  entity         Entity    @relation(fields: [entityId], references: [id])
+  severity       Severity
+  title         String
+  details       String
+  createdAt     DateTime  @default(now())
+  acknowledgedAt DateTime?
+
+  @@index([severity])
+  @@index([entityId])
+  @@index([createdAt])
+}
+
+model Event {
+  id        String    @id @default(cuid())
+  phase     PhaseType
+  message   String
+  meta      Json?
+  at        DateTime  @default(now())
+  
+  @@index([phase])
+  @@index([at])
+}

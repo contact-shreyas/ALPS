@@ -1,0 +1,33 @@
+/* Remove all interactive cursors and indicators */
+.leaflet-container {
+  cursor: default !important;
+}
+
+/* Remove circle markers */
+.leaflet-interactive {
+  display: none !important;
+}
+
+/* Remove any click indicators */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-custom-marker,
+.leaflet-pane > svg path {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+/* Disable hover effects */
+.leaflet-layer,
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+  pointer-events: none !important;
+}

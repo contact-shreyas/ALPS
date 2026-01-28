@@ -1,0 +1,21 @@
+.leaflet-container {
+  cursor: default !important;
+}
+
+.leaflet-grab {
+  cursor: default !important;
+}
+
+.leaflet-dragging .leaflet-grab {
+  cursor: move !important;
+}
+
+/* Remove interactive cursor styles */
+.leaflet-interactive {
+  cursor: default !important;
+}
+
+/* Remove marker hover effects */
+.leaflet-marker-icon {
+  cursor: default !important;
+}
