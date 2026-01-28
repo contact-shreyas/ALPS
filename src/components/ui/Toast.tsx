@@ -116,6 +116,8 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>
 
+export const TOAST_DURATION = 4000
+
 export {
   type ToastProps,
   type ToastActionElement,
