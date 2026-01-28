@@ -1,4 +1,4 @@
-import { TOAST_DURATION, type ToastActionElement, type ToastProps } from '@/components/ui/toast';
+import { TOAST_DURATION, type ToastActionElement, type ToastProps } from '@/components/ui/Toast';
 
 const useToast = () => {
   const toast = ({ title, description, variant, action }: ToastProps & { action?: ToastActionElement }) => {
