@@ -1,0 +1,34 @@
+/* Disable map interaction cursors */
+.mapboxgl-canvas-container {
+  cursor: default !important;
+}
+
+.maplibregl-canvas-container {
+  cursor: default !important;
+}
+
+/* Hide map interaction dots */
+.mapboxgl-user-location-dot,
+.maplibregl-user-location-dot,
+.mapboxgl-canvas-container canvas,
+.maplibregl-canvas-container canvas {
+  cursor: default !important;
+}
+
+/* Disable any custom cursors */
+[class*="cursor-"] {
+  cursor: default !important;
+}
+
+/* Remove MapboxDraw cursors */
+.mapbox-gl-draw_cursor-move,
+.mapbox-gl-draw_cursor-pointer,
+.mapbox-gl-draw_cursor-add {
+  cursor: default !important;
+}
+
+/* Override any active point styles */
+.mapbox-gl-draw_active-points,
+.maplibregl-draw_active-points {
+  display: none !important;
+}

@@ -1,0 +1,111 @@
+\section{Literature Survey}
+
+\subsection{Introduction}
+
+The proliferation of Artificial Light at Night (ALAN) represents a rapidly intensifying environmental disturbance with documented impacts spanning ecological systems, human health, astronomical observations, and energy sustainability~\cite{bara2023global}. While the quantification and mitigation of light pollution has historically relied on ground-based photometry and static policy frameworks, recent advances in satellite remote sensing, spatiotemporal machine learning, model explainability techniques, and autonomous decision systems have enabled unprecedented capabilities for real-time monitoring and adaptive intervention. This literature survey synthesizes five interconnected research strands that collectively inform the Agentic Light Pollution Sentinel (ALPS) framework: (a) satellite-based nighttime light measurement and calibration, (b) ecological and societal impacts of artificial light pollution, (c) spatiotemporal machine learning methods for environmental prediction, (d) interpretable AI for policy-relevant decision support, and (e) autonomous systems for environmental monitoring and adaptive control.
+
+\subsection{Satellite Remote Sensing of Nighttime Lights}
+
+\subsubsection{Evolution from DMSP-OLS to VIIRS Black Marble}
+
+The systematic measurement of anthropogenic light emissions from space began with the Defense Meteorological Satellite Program's Operational Linescan System (DMSP-OLS), which provided global nighttime radiance data from 1992 to 2013~\cite{cinzano2000artificial,cinzano2001first}. Cinzano et al.~\cite{cinzano2000artificial} pioneered computational methods to map artificial sky brightness from DMSP-OLS measurements, establishing the foundation for global light pollution atlases. Falchi et al.~\cite{falchi2016new} extended this work to create the seminal World Atlas of Artificial Night Sky Brightness, revealing that over 80\% of humanity experiences light-polluted skies. However, DMSP-OLS suffered from coarse spatial resolution ($\sim$2.7~km), lack of on-board calibration, and saturation in bright urban cores.
+
+The launch of NASA's Suomi NPP satellite in 2011, carrying the Visible Infrared Imaging Radiometer Suite Day/Night Band (VIIRS-DNB), marked a paradigm shift in nighttime light remote sensing. VIIRS offers superior spatial resolution ($\sim$500~m at nadir), radiometric calibration, and dynamic range, enabling detection of radiance variations from $3\times10^{-9}$ to $2\times10^{-4}$~W$\cdot$cm$^{-2}\cdot$sr$^{-1}$~\cite{roman2018nasa}. The NASA Black Marble product suite (VNP46A1 daily, VNP46A2 8-day composite, VNP46A3 monthly composite) incorporates atmospheric correction, cloud masking, stray light removal, and lunar BRDF normalization. Bar{\'a} et al.~\cite{bara2023quantitative} demonstrated quantitative evaluation of outdoor artificial light emissions using low Earth orbit radiometers, establishing VIIRS as the gold standard for anthropogenic light monitoring. Recent methodological advances include ML-enhanced atmospheric correction algorithms~\cite{tian2025novel}, spectral disaggregation techniques using ISS imagery~\cite{sanchez2021colour}, and harmonized DMSP-VIIRS time series for long-term trend analysis~\cite{singh2023ndui}.
+
+\subsubsection{Applications in Urban and Environmental Monitoring}
+
+VIIRS nighttime lights have been extensively applied to proxy socioeconomic indicators including GDP, population density, electrification rates, and energy consumption. Agnihotri and Mishra~\cite{agnihotri2021indian} demonstrated strong correlations between Indian economic growth and VIIRS radiance ($R^2 = 0.87$), validating the use of nighttime lights as real-time economic indicators. For environmental applications, Chen et al.~\cite{chen2019detecting} integrated VIIRS data with Landsat imagery for long-term landslide monitoring in urbanized Taiwan, while Bustamante-Calabria et al.~\cite{bustamante2021effects} analyzed COVID-19 lockdown impacts on urban light emissions using combined ground photometry and VIIRS measurements. Gafoor et al.~\cite{gafoor2023exploring} explored relationships between NPP-VIIRS nighttime lights and carbon footprints in the UAE, establishing quantitative links between luminous intensity and greenhouse gas emissions.
+
+Critical challenges remain in VIIRS data utilization. Barentine~\cite{barentine2025viirs} demonstrated that VIIRS-DNB radiance products are insufficient for assessing reflected light from high-albedo pavements without ground-truth validation, while Bar{\'a} and Castro-Torres~\cite{bara2025diverging} identified diverging evolution patterns between citizen science observations (Globe at Night) and VIIRS-DNB measurements, highlighting the need for multi-modal validation. Recent innovations address these limitations through generative AI for nighttime image reconstruction~\cite{zhou2025lighting}, panchromatic-to-color transformation using machine learning~\cite{rybnikova2022coloring}, and deep learning approaches for translating multispectral imagery to nighttime radiance~\cite{huang2020translating}.
+
+\subsection{Ecological and Policy Dimensions of Artificial Light at Night}
+
+\subsubsection{Biological and Health Impacts}
+
+Artificial light at night constitutes a pervasive environmental stressor with cascading effects across biological scales. Falchi and Bar{\'a}~\cite{bara2023global} characterized ALAN as a global disruptor of night-time ecosystems, documenting impacts on circadian rhythms, predator-prey dynamics, pollination networks, and migratory navigation. Choudhary and Kumar~\cite{choudhary2023severity} provided a comprehensive review of light pollution severity, identifying multifaceted impacts ranging from melatonin suppression and sleep disruption in humans to behavioral alterations in nocturnal species. The astronomical community has raised urgent concerns regarding the dual threat of ground-based light pollution and satellite mega-constellations~\cite{falchi2023call,lawler2021visibility}, with Kocifaj et al.~\cite{kocifaj2021proliferation} quantifying the contribution of space objects to artificial night sky brightness.
+
+Jechow et al.~\cite{jechow2019using,jechow2017imaging} developed all-sky photometry techniques to investigate cloud amplification effects on skyglow, demonstrating that overcast conditions can increase artificial sky brightness by factors of 2--10 depending on cloud optical depth and urban proximity. This work established critical linkages between atmospheric physics and light pollution propagation. Bar{\'a} et al.~\cite{bara2018light,ges2018light} extended these analyses to coastal and aquatic environments, revealing significant ALAN intrusion into marine ecosystems through aquaculture installations and offshore industrial lighting.
+
+\subsubsection{Policy Frameworks and Monitoring Challenges}
+
+Effective light pollution mitigation requires robust monitoring infrastructure and evidence-based policy mechanisms. Pun et al.~\cite{pun2014contributions} deployed the first comprehensive night sky brightness monitoring network in Hong Kong, revealing quantitative contributions from different artificial lighting sources and establishing baselines for regulatory enforcement. Angeloni et al.~\cite{angeloni2024towards} conducted spectro-photometric characterization of Chilean night skies, providing reference measurements for astronomical observatories and informing national lighting policies.
+
+The transition from traditional lighting technologies to LEDs has introduced new complexities. S{\'a}nchez de Miguel et al.~\cite{sanchez2017sky} demonstrated that Sky Quality Meter (SQM) measurements exhibit spectral biases in response to LED color temperature changes, necessitating wavelength-specific calibration for temporal trend analysis. Bar{\'a} et al.~\cite{bara2024detecting,bara2019monitoring} developed monitoring frameworks to detect changes in anthropogenic light emissions while accounting for atmospheric variability, establishing statistical detection limits for policy-relevant brightness thresholds. Falchi and Bar{\'a}~\cite{falchi2020protecting} proposed linear systems approaches for protecting astronomical observatory dark skies through systematic control of upward light flux ratios and spatial propagation models.
+
+\subsection{Spatiotemporal Machine Learning for Environmental Prediction}
+
+\subsubsection{Gradient Boosting and Tree-Based Ensemble Methods}
+
+The application of gradient boosting machines (GBMs) to geospatial and environmental problems has demonstrated superior performance compared to traditional statistical models and deep neural networks in many contexts. LightGBM and XGBoost, leveraging histogram-based split finding and parallel tree construction, achieve state-of-the-art accuracy on tabular data with efficient training times~\cite{chen2016xgboost,ke2017lightgbm}. In environmental applications, these methods excel at capturing non-linear relationships, interactions between climate/land-use variables, and threshold effects without requiring extensive feature engineering.
+
+Recent studies demonstrate the effectiveness of tree-based ensembles for air quality prediction ($R^2 > 0.90$ with meteorological and satellite features)~\cite{di2019ensemble}, flood risk modeling, and ecological niche prediction. The computational efficiency of LightGBM (often 10--20$\times$ faster than XGBoost for equivalent accuracy) is particularly valuable for operational systems requiring daily model updates. Training times under 60 seconds for datasets with $10^5$--$10^6$ observations enable real-time adaptation to policy interventions and environmental changes.
+
+\subsubsection{Deep Learning Approaches and Comparative Performance}
+
+Deep learning architectures, including Long Short-Term Memory (LSTM) networks and Convolutional Neural Networks (CNNs), have been applied to spatiotemporal environmental forecasting with mixed results~\cite{reichstein2019deep}. While LSTMs excel at capturing long-range temporal dependencies in sequential data (e.g., time series of satellite imagery), they often require orders of magnitude more training data and computational resources than GBMs to achieve comparable accuracy. For tabular geospatial data with $< 10^6$ training examples, tree-based methods typically outperform deep learning models in both accuracy and inference speed.
+
+Hybrid approaches combining CNNs for spatial feature extraction with GBMs for prediction have shown promise in land cover classification and urban growth modeling. However, the interpretability-performance trade-off remains a critical consideration for policy applications, where model transparency is often as important as predictive accuracy.
+
+\subsection{Explainable AI for Policy-Relevant Decision Support}
+
+\subsubsection{SHAP Values and Feature Attribution Methods}
+
+SHapley Additive exPlanations (SHAP) have emerged as the theoretically grounded framework for model-agnostic feature attribution~\cite{lundberg2017unified,shapley1953value}. Derived from cooperative game theory, SHAP values quantify each feature's marginal contribution to predictions while satisfying desirable properties including local accuracy, missingness, and consistency. TreeSHAP, the optimized algorithm for tree-based models, computes exact Shapley values in polynomial time by exploiting tree structure, enabling efficient interpretation of ensemble methods without approximation errors.
+
+Recent applications of SHAP to environmental and geospatial problems include: thermospheric neutral density prediction with identification of solar irradiance as the dominant driver~\cite{bard2025elucidating}, land-use change modeling revealing non-linear urbanization thresholds, and air quality forecasting with temporal evolution of feature importance across seasons. Causal SHAP extensions incorporate causal discovery to distinguish direct vs. mediated feature effects, addressing a key limitation of correlation-based attribution methods~\cite{ng2025causal}.
+
+\subsubsection{Interpretability for Policy Transparency}
+
+Explainable AI is particularly critical in policy-relevant applications where stakeholder trust, regulatory compliance, and evidence-based intervention design require transparent decision logic~\cite{arrieta2020explainable}. Vassiliades et al.~\cite{vassiliades2025utilizing} demonstrated integration of large language models with XAI frameworks to generate natural language explanations of SHAP attributions, enhancing accessibility for non-technical policymakers.
+
+The stability and consistency of explanations under perturbations remains an active research challenge. Ballegeer et al.~\cite{ballegeer2025evaluating} evaluated SHAP stability in cost-sensitive credit scoring, finding that local attributions can vary significantly for similar instances in high-dimensional feature spaces. This motivates aggregation strategies such as SHAP summary plots and clustered feature importance rankings to provide robust global interpretations.
+
+\subsection{Autonomous Systems for Environmental Monitoring}
+
+\subsubsection{Sense-Reason-Act-Learn Frameworks}
+
+Autonomous control systems for environmental applications have traditionally followed reactive or model-predictive architectures. Recent advances in reinforcement learning and model-free optimization have enabled more sophisticated Sense-Reason-Act-Learn (SRAL) loops that adapt decision policies based on observed outcomes~\cite{sutton2018reinforcement,silver2021reward}. Key characteristics of effective SRAL systems include: (a) real-time data ingestion from multi-modal sensors, (b) probabilistic reasoning under uncertainty, (c) automated actuation with human-in-the-loop overrides, and (d) continuous learning from feedback signals.
+
+Applications span precision agriculture (adaptive irrigation control), wildlife monitoring (autonomous camera trap networks), and air quality management (dynamic traffic regulation)~\cite{hasenfratz2015deriving}. Trivedi et al.~\cite{trivedi2025intelligent} surveyed intelligent sensing-to-action frameworks for robust autonomy at the edge, highlighting challenges in latency-constrained decision-making, energy-efficient inference, and resilience to sensor failures.
+
+\subsubsection{Adaptive Decision Support in Environmental Systems}
+
+Structural health monitoring of infrastructure provides analogous use cases for autonomous environmental decision systems. Arul and Kareem~\cite{arul2020data} developed anomaly detection methods using shapelet transforms on sensor time series, enabling early warning of structural deterioration. Multi-temporal analysis scales (hourly sensing, daily reasoning, monthly learning) balance responsiveness with statistical robustness.
+
+Critical research gaps include formal verification of autonomous environmental systems (ensuring safety constraints are satisfied), human-AI collaboration patterns for contested policy decisions, and scalability to heterogeneous sensor networks with varying data quality~\cite{pearl2018book}. The integration of causal inference methodologies with adaptive control remains an open challenge, particularly for distinguishing intervention effects from confounding environmental factors.
+
+\subsection{Research Gaps and ALPS Contributions}
+
+Despite extensive progress across these five research domains, significant gaps persist at their intersection:
+
+\begin{enumerate}
+\item \textbf{Temporal Resolution Mismatch}: While VIIRS provides daily radiance measurements, most light pollution studies report annual or seasonal aggregates, limiting the ability to detect short-term policy impacts or anomalous events.
+
+\item \textbf{Spatial Granularity for Policy}: Global and national-scale analyses dominate the literature~\cite{falchi2016new,bara2023global}, yet municipal lighting regulations require district or neighborhood-level intelligence that exceeds VIIRS native resolution ($\sim$500~m).
+
+\item \textbf{Decomposition of Light Sources}: Few studies systematically separate anthropogenic vs. natural (moonlight, airglow, zodiacal light) contributions or disaggregate fixed infrastructure vs. transient sources (traffic, events), complicating targeted interventions.
+
+\item \textbf{ML Model Interpretability}: Geospatial ML applications often prioritize predictive accuracy over explainability, yet policy applications demand transparent attribution of predictions to environmental, demographic, and infrastructure variables.
+
+\item \textbf{Closed-Loop Adaptation}: Existing monitoring systems operate in open-loop mode without automated feedback mechanisms to adjust alert thresholds or recommend policy actions based on measured outcomes.
+
+\item \textbf{Cross-Region Generalization}: Training datasets are typically localized to specific geographic contexts, limiting model transferability to regions with different lighting practices, climatic conditions, or regulatory frameworks.
+\end{enumerate}
+
+The Agentic Light Pollution Sentinel (ALPS) framework addresses these gaps through:
+
+\begin{itemize}
+\item \textbf{Daily District-Level Monitoring}: Aggregation of VIIRS VNP46A1 daily products to 742 Indian district boundaries, enabling sub-500m effective resolution through geometric overlay with administrative polygons.
+
+\item \textbf{Automated Source Decomposition}: Decomposition of observed radiance into natural background ($F_{\text{nat}}$), fixed infrastructure ($F_{\text{infra}}$), and transient anthropogenic ($F_{\text{anthro}}$) components using temporal pattern analysis and SHAP-guided feature attribution.
+
+\item \textbf{Explainable LightGBM Predictions}: Integration of gradient boosting ($R^2 = 0.952$, 56.7~s training time) with TreeSHAP analysis to quantify feature importance across policy phases (2016--2018 pre-LED, 2019--2022 transition, 2023--2025 AI-regulated).
+
+\item \textbf{Autonomous SRAL Policy Loop}: Hourly satellite data ingestion (\textsc{sense}), daily ML-based anomaly detection with 18--36h predictive lead time (\textsc{reason}), real-time alert deployment to municipal authorities (\textsc{act}), and monthly model retraining based on policy effectiveness metrics (\textsc{learn}).
+
+\item \textbf{Demonstrated Generalization}: Cross-region validation yielding Migration~$R^2 = 0.934$ across districts with heterogeneous urbanization levels, population densities, and baseline radiance values.
+
+\item \textbf{Open-Source Reproducibility}: Full codebase, pre-processed district-level time series (2014--2025), and interactive dashboard enabling replication and extension to other geographic contexts.
+\end{itemize}
+
+This synthesis of satellite remote sensing, interpretable machine learning, and autonomous decision frameworks represents a novel contribution to the intersection of environmental informatics, computational sustainability, and evidence-based policy design.

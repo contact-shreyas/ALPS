@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["metrics", "views", "relationJoins"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserSettings {
+  id          Int      @id @default(autoincrement())
+  userEmail   String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  mapSettings String
+  displaySettings String
+  notificationSettings String
+  dataSettings String
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  status    String   // 'sent' | 'failed' | 'pending'
+  transport String   // 'smtp' | 'json' | 'json-fallback'
+  messageId String?
+  error     String?
+  sentAt    DateTime
+  createdAt DateTime @default(now())
+  
+  @@index([to])
+  @@index([status])
+  @@index([sentAt])
+  @@index([createdAt])
+}
+
+model IngestedData {
+  id          String    @id @default(cuid())
+  path        String
+  type        String
+  metadata    String?  // JSON as string
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([processedAt])
+}
+
+model SystemSettings {
+  id              String    @id @default("default")
+  alertsEnabled   Boolean   @default(true)
+  ingestSchedule  String?
+  processSchedule String?
+  updatedAt       DateTime  @updatedAt
+}
+
+model Settings {
+  key       String   @id
+  value     String
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model ReportSchedule {
+  id          String   @id @default(cuid())
+  type        String   // "dashboard" or "district"
+  email       String?
+  frequency   String   // "daily", "weekly", "custom"
+  days        String?  // Comma-separated list of days
+  time        String   // HH:mm format
+  enabled     Boolean  @default(true)
+  lastSentAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  metadata    String?  // Additional JSON data as string
+
+  @@index([type, enabled])
+  @@index([lastSentAt])
+}
+
+/// Map for string to ProcessType enum
+view ProcessTypes {
+  value String @id @unique
+  label String
+
+  @@map("process_types")
+}
+
+/// Map for string to Severity enum
+view Severities {
+  value String @id @unique
+  label String
+
+  @@map("severities")
+}
+
+/// Map for string to PhaseType enum
+view PhaseTypes {
+  value String @id @unique
+  label String
+
+  @@map("phase_types")
+}
+
+/// Map for string to MetricType enum
+view MetricTypes {
+  value String @id @unique
+  label String
+
+  @@map("metric_types")
+}
+
+model State {
+  stateId     String             @id @default(cuid())
+  code        String             @unique
+  name        String
+  geomGeoJSON String            // GeoJSON as string
+  districts   District[]
+  metrics     StateMetric[]
+  daily       StateDailyMetric[]
+  createdAt   DateTime           @default(now())
+}
+
+model District {
+  districtId  String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  stateCode   String
+  state       State    @relation(fields: [stateCode], references: [code], onDelete: Cascade)
+  contactEmail String?
+  geomGeoJSON String            // GeoJSON as string
+  bbox        String           // JSON array as string [west, south, east, north]
+  metrics     DistrictMetric[]
+  daily       DistrictDailyMetric[]
+  hotspots    Hotspot[]
+  alerts      Alert[]
+  createdAt   DateTime @default(now())
+  @@index([stateCode])
+}
+
+
+model StateMetric {
+  id        String  @id @default(cuid())
+  code      String
+  state     State   @relation(fields: [code], references: [code], onDelete: Cascade)
+  year      Int
+  radiance  Float
+  hotspots  Int
+  createdAt DateTime @default(now())
+  @@unique([code, year], name: "code_year")
+  @@index([year])
+}
+
+model DistrictMetric {
+  id        String    @id @default(cuid())
+  code      String
+  district  District  @relation(fields: [code], references: [code], onDelete: Cascade)
+  year      Int
+  radiance  Float
+  hotspots  Int
+  createdAt DateTime @default(now())
+  @@unique([code, year], name: "code_year")
+  @@index([year])
+}
+
+model StateDailyMetric {
+  id        String   @id @default(cuid())
+  code      String
+  state     State    @relation(fields: [code], references: [code], onDelete: Cascade)
+  date      DateTime
+  radiance  Float
+  hotspots  Int
+  createdAt DateTime @default(now())
+  @@unique([code, date], name: "code_date")
+  @@index([date])
+}
+
+model DistrictDailyMetric {
+  id        String    @id @default(cuid())
+  code      String
+  district  District  @relation(fields: [code], references: [code], onDelete: Cascade)
+  date      DateTime
+  radiance  Float
+  hotspots  Int
+  createdAt DateTime @default(now())
+  @@unique([code, date], name: "code_date")
+  @@index([date])
+}
+
+model Alert {
+  id         String    @id @default(cuid())
+  level      String
+  code       String
+  message    String
+  severity   Int
+  confirmed  Boolean   @default(false)
+  detectedAt DateTime  @default(now())
+  sentAt     DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  district   District? @relation(fields: [districtId], references: [districtId])
+  districtId String?
+  // Optional link to Insights Entity for generic dashboard
+  entityId   String?
+  entity     Entity?   @relation("EntityAlerts", fields: [entityId], references: [id])
+  @@index([code, level])
+  @@index([detectedAt])
+  @@index([districtId])
+  @@index([entityId])
+}
+
+model MetricHistory {
+  id        String     @id @default(cuid())
+  type      String     // from MetricType
+  value     Float
+  timestamp DateTime   @default(now())
+  @@index([type, timestamp])
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  code      String
+  note      String
+  rating    Int?
+  createdAt DateTime @default(now())
+}
+
+model AgentLog {
+  id        String   @id @default(cuid())
+  component String   // 'sense' | 'reason' | 'act' | 'learn'
+  status    String   // 'success' | 'error'
+  error     String?
+  timestamp DateTime @default(now())
+  @@index([component])
+  @@index([timestamp])
+}
+
+model Hotspot {
+  id           String    @id @default(cuid())
+  districtCode String
+  district     District  @relation(fields: [districtCode], references: [code], onDelete: Cascade)
+  lat          Float
+  lng          Float
+  brightness   Float
+  delta        Float
+  severity     String    // 'low' | 'medium' | 'high' | 'extreme'
+  notified     Boolean   @default(false)
+  detectedAt   DateTime  @default(now())
+  resolvedAt   DateTime?
+  @@index([districtCode])
+  @@index([severity])
+  @@index([detectedAt])
+}
+
+model ProcessLog {
+  id        String      @id @default(cuid())
+  type      String      // from ProcessType
+  status    String      // 'RUNNING' | 'SUCCESS' | 'ERROR'
+  error     String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([type, status])
+  @@index([createdAt])
+}
+
+// ============================
+// Insights Monitor data models
+// ============================
+
+model Source {
+  id            String    @id @default(cuid())
+  name          String
+  kind          String
+  coveragePct   Float
+  lastUpdatedAt DateTime
+  entities      Entity[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([kind])
+}
+
+model Entity {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  region    String
+  tags      String?  // JSON array as string
+  sourceId  String
+  source    Source   @relation(fields: [sourceId], references: [id])
+  metrics   Metric[]
+  alerts    Alert[]  @relation("EntityAlerts")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([region])
+  @@index([sourceId])
+}
+
+model Metric {
+  id           String   @id @default(cuid())
+  entityId     String
+  entity       Entity   @relation(fields: [entityId], references: [id])
+  date         DateTime
+  valueNumeric Float
+  createdAt    DateTime @default(now())
+
+  @@index([entityId])
+  @@index([date])
+}
+
+model Event {
+  id      String    @id @default(cuid())
+  phase   String    // from PhaseType
+  message String
+  meta    String?  // JSON as string
+  at      DateTime  @default(now())
+
+  @@index([phase])
+  @@index([at])
+}
