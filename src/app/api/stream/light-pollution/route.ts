@@ -8,6 +8,8 @@ export const runtime = 'nodejs';
  * Server-Sent Events endpoint for real-time light pollution data streaming
  * This endpoint provides continuous updates for the 3D visualization
  */
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const includeHotspots = searchParams.get('hotspots') !== 'false';

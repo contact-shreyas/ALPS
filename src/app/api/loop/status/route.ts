@@ -10,6 +10,8 @@ interface LoopStatus {
   lastNotification: Date | null;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // Get latest status entries

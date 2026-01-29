@@ -11,6 +11,8 @@ const feedbackSchema = z.object({
   contact: z.string().optional()
 });
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const json = await request.json();

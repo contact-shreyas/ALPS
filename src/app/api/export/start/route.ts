@@ -10,6 +10,8 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(10, '1 h'), // 10 exports per hour
 });
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     // Check authentication

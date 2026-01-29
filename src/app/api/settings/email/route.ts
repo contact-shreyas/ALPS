@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
   
@@ -19,6 +21,8 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true });
 }
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const setting = await prisma.settings.findUnique({

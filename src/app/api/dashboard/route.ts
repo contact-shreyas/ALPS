@@ -65,6 +65,8 @@ const responseSchema = z.object({
   })
 })
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     if (process.env.USE_MOCK_API === '1') return NextResponse.json(mockDashboard())

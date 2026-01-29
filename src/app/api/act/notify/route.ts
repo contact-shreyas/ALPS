@@ -5,6 +5,8 @@ import { z } from 'zod'
 const bodySchema = z.object({ to: z.string().email().default('demo@local'), alertId: z.string().optional() })
 const responseSchema = z.object({ ok: z.literal(true), queued: z.boolean() })
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   const json = await request.json().catch(() => ({}))
   const { to, alertId } = bodySchema.parse(json)

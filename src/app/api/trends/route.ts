@@ -5,6 +5,8 @@ import { z } from 'zod'
 
 const querySchema = z.object({ range: z.string().regex(/^(7d|30d|90d)$/).optional().default('30d') })
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     if (process.env.USE_MOCK_API === '1') return NextResponse.json(mockTrends())

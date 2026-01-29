@@ -18,6 +18,8 @@ const itemSchema = z.object({
   entity: z.object({ code: z.string(), name: z.string(), region: z.string() }),
 })
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url)

@@ -4,6 +4,8 @@ import { z } from 'zod'
 
 const responseSchema = z.object({ ok: z.literal(true), ingested: z.number() })
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   // Simulate Sense: create an Event and nudge coverage
   const sources = await prisma.source.findMany()

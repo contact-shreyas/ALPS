@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loopState } from "@/lib/loop-state";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   // Coverage
   const totalDistricts = await prisma.district.count();

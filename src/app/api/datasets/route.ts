@@ -7,6 +7,8 @@ const QuerySchema = z.object({
   pageSize: z.coerce.number().min(1).max(100).default(20),
 })
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)

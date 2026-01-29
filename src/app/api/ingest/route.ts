@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { loopState } from "@/lib/loop-state";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   loopState.incQueue();
   // SENSE: fetch new VIIRS tile (stub)

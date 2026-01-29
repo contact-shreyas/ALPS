@@ -4,6 +4,8 @@ import { generateMockHealthData } from '@/lib/mock-health-data';
 
 let lastHealthData = generateMockHealthData();
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const processes = await prisma.processLog.findMany({

@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 
 let threshold_nW = 8; // example global threshold (demo)
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({} as any));
 
@@ -20,6 +22,8 @@ export async function POST(req: NextRequest) {
   loopState.setLearn(new Date().toISOString());
   return NextResponse.json({ threshold_nW });
 }
+
+export const dynamic = 'force-dynamic';
 
 export function GET() {
   return NextResponse.json({ threshold_nW });

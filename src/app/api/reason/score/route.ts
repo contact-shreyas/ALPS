@@ -4,6 +4,8 @@ import { z } from 'zod'
 
 const responseSchema = z.object({ ok: z.literal(true), alertsRaised: z.number() })
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   const since = new Date()
   since.setDate(since.getDate() - 30)

@@ -28,6 +28,8 @@ const overviewSchema = z.object({
   lastUpdated: z.date(),
 })
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     if (process.env.USE_MOCK_API === '1') return NextResponse.json(mockOverview())

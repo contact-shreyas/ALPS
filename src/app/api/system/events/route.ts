@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateMockEvents } from '@/lib/mock-health-data';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // Get the last 20 events from the last 24 hours

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export function GET() {
   return NextResponse.json({
     product: "VIIRS Black Marble — VNP46A2 (Monthly Nighttime Lights); tiles from local COG",

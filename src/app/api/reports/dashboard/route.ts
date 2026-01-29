@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { sendMail } from '@/lib/mailer';
 import { generateDashboardReport } from '@/lib/reports';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();

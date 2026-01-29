@@ -3,6 +3,8 @@ import { loopState } from "@/lib/loop-state";
 import { sendMail } from "@/lib/mailer";
 import prisma from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const { hotspotId } = await req.json();
   const h = await prisma.alert.findUnique({ where: { id: hotspotId } });

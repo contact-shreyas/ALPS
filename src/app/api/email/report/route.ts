@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendMail } from "@/lib/mailer";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   const to = process.env.MUNICIPALITY_EMAIL || process.env.SMTP_USER || "devnull@example.com";
 
