@@ -153,6 +153,12 @@ export async function GET() {
       .filter(m => m.type === 'COVERAGE')
       .slice(0, 1)[0]?.value || 0
 
+    // If no metrics data exists in database, return mock data
+    if (hotspots24h === 0 && avgLatency === 0 && coverage === 0) {
+      console.warn('Dashboard: no metrics data found, returning mock data')
+      return NextResponse.json(mockDashboard())
+    }
+
     // Format response
     const response = {
       autonomousLoop: {
