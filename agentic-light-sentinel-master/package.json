@@ -8,7 +8,7 @@
     "worker": "tsx src/lib/exportWorker.ts",
     "dev:full": "concurrently \"pnpm dev\" \"pnpm watch:db\" \"pnpm worker\"",
     "insights:seed": "tsx prisma/seed-insights.ts",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "build:analyze": "cross-env ANALYZE=true next build",
     "start": "next start -p 3000",
     "start:prod": "cross-env NODE_ENV=production next start -p 3000",
