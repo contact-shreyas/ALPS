@@ -22,8 +22,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ ok: true });
 }
 
-export const dynamic = 'force-dynamic';
-
 export async function GET() {
   const setting = await prisma.settings.findUnique({
     where: { key: 'notification_email' },

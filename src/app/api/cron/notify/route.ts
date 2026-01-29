@@ -60,8 +60,6 @@ export async function POST(request: NextRequest) {
 }
 
 // GET endpoint for debugging
-export const dynamic = 'force-dynamic';
-
 export async function GET(request: NextRequest) {
   try {
     const secret = request.nextUrl.searchParams.get('secret');

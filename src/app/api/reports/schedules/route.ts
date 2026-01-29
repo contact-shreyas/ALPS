@@ -31,8 +31,6 @@ export async function GET() {
 }
 
 // Create new dashboard report schedule
-export const dynamic = 'force-dynamic';
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -60,8 +58,6 @@ export async function POST(request: Request) {
 }
 
 // Update an existing schedule
-export const dynamic = 'force-dynamic';
-
 export async function PUT(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -92,8 +88,6 @@ export async function PUT(request: Request) {
 }
 
 // Delete a schedule
-export const dynamic = 'force-dynamic';
-
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

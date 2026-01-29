@@ -23,8 +23,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ threshold_nW });
 }
 
-export const dynamic = 'force-dynamic';
-
 export function GET() {
   return NextResponse.json({ threshold_nW });
 }
