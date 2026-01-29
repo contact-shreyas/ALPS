@@ -9,26 +9,27 @@ export async function GET(request: Request) {
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
 
-    // Fetch light pollution data from database
-    const data = await prisma.lightPollutionData.findMany({
+    // Fetch alert data from database
+    const data = await prisma.alert.findMany({
       select: {
         id: true,
-        timestamp: true,
-        latitude: true,
-        longitude: true,
-        brightness: true,
-        quality: true,
-        source: true,
+        code: true,
+        level: true,
+        message: true,
+        severity: true,
+        detectedAt: true,
+        sentAt: true,
+        confirmed: true,
         createdAt: true,
       },
       where: {
-        timestamp: {
+        detectedAt: {
           gte: startDate ? new Date(startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           lte: endDate ? new Date(endDate) : new Date()
         }
       },
       orderBy: {
-        timestamp: 'desc',
+        detectedAt: 'desc',
       },
     });
 
@@ -62,7 +63,8 @@ export async function GET(request: Request) {
         data.forEach(row => {
           worksheet.addRow({
             ...row,
-            timestamp: row.timestamp.toISOString(),
+            detectedAt: row.detectedAt.toISOString(),
+            sentAt: row.sentAt?.toISOString() || 'N/A',
             createdAt: row.createdAt.toISOString()
           });
         });
@@ -72,24 +74,25 @@ export async function GET(request: Request) {
         return new NextResponse(buffer, {
           headers: {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition': `attachment; filename=light-pollution-data-${new Date().toISOString().split('T')[0]}.xlsx`
+            'Content-Disposition': `attachment; filename=alerts-${new Date().toISOString().split('T')[0]}.xlsx`
           }
         });
       }
 
       default: {
         // CSV format
-        const headers = ['ID', 'Timestamp', 'Latitude', 'Longitude', 'Brightness', 'Quality', 'Source', 'Created At'];
+        const headers = ['ID', 'Code', 'Level', 'Message', 'Severity', 'Detected At', 'Sent At', 'Confirmed', 'Created At'];
         const csvRows = [
           headers.join(','),
           ...data.map(row => [
             row.id,
-            row.timestamp.toISOString(),
-            row.latitude,
-            row.longitude,
-            row.brightness,
-            row.quality,
-            row.source,
+            row.code,
+            row.level,
+            row.message,
+            row.severity,
+            row.detectedAt.toISOString(),
+            row.sentAt?.toISOString() || 'N/A',
+            row.confirmed,
             row.createdAt.toISOString()
           ].join(','))
         ];
@@ -98,7 +101,7 @@ export async function GET(request: Request) {
         return new NextResponse(csvContent, {
           headers: {
             'Content-Type': 'text/csv',
-            'Content-Disposition': `attachment; filename=light-pollution-data-${new Date().toISOString().split('T')[0]}.csv`
+            'Content-Disposition': `attachment; filename=alerts-${new Date().toISOString().split('T')[0]}.csv`
           }
         });
       }

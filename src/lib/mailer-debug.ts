@@ -105,7 +105,8 @@ export async function sendMail(opts: { to: string; subject: string; html: string
       await transporter.verify();
       console.log("[MAILER] ✅ Transporter verification successful");
     } catch (verifyError) {
-      console.warn("[MAILER] ⚠️  Transporter verification failed:", verifyError.message);
+      const error = verifyError as Error;
+      console.warn("[MAILER] ⚠️  Transporter verification failed:", error.message);
       // Continue anyway, some transporters don't support verify()
     }
     
@@ -232,6 +233,7 @@ export async function sendMail(opts: { to: string; subject: string; html: string
           originalError: err?.message
         };
       } catch (fallbackErr) {
+        const fallbackError = fallbackErr as Error;
         console.error("[MAILER] ❌ JSON transport fallback also failed:", fallbackErr);
         
         await logEmail({
@@ -239,15 +241,17 @@ export async function sendMail(opts: { to: string; subject: string; html: string
           subject: opts.subject,
           status: 'failed',
           transport: 'json-fallback',
-          error: `Fallback failed: ${fallbackErr?.message}`,
+          error: `Fallback failed: ${fallbackError?.message}`,
           sentAt: new Date()
         });
         
-        throw new Error(`Email sending failed: ${err?.message || err}. Fallback also failed: ${fallbackErr?.message}`);
+        const mainError = err as Error;
+        throw new Error(`Email sending failed: ${mainError?.message || err}. Fallback also failed: ${fallbackError?.message}`);
       }
     }
     
-    throw new Error(`Email sending failed: ${err?.message || err}`);
+    const mainError = err as Error;
+    throw new Error(`Email sending failed: ${mainError?.message || err}`);
   }
 }
 
@@ -260,8 +264,9 @@ export async function testEmailConnection() {
     console.log("[MAILER] ✅ Connection test successful");
     return { success: true };
   } catch (error) {
+    const err = error as Error;
     console.error("[MAILER] ❌ Connection test failed:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: err.message };
   }
 }
 

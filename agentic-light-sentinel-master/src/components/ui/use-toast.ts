@@ -1,7 +1,17 @@
-import { TOAST_DURATION, type ToastActionElement, type ToastProps } from '@/components/ui/toast';
+import { type ToastActionElement, type ToastProps } from '@/components/ui/Toast';
+
+// Toast duration in milliseconds
+const TOAST_DURATION = 4000;
+
+export interface ToastOptions {
+  title?: string;
+  description?: string;
+  variant?: 'default' | 'destructive';
+  action?: ToastActionElement;
+}
 
 const useToast = () => {
-  function toast({ title, description, variant, action }: ToastProps & { action?: ToastActionElement }) {
+  const toast = ({ title, description, variant, action }: ToastOptions) => {
     // Dispatch a custom event that will be handled by the Toaster component
     const event = new CustomEvent('toast', {
       detail: {
@@ -25,7 +35,7 @@ const useToast = () => {
 
 export { useToast, type ToastProps };
 
-export function toast(props: ToastProps) {
+export function toast(props: ToastOptions) {
   const { toast: showToast } = useToast();
   showToast(props);
 }

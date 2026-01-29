@@ -63,7 +63,16 @@ export default function Home() {
     <div className="w-full h-full flex gap-4 relative bg-gray-50">
       {/* Metrics Sidebar */}
       <div className="w-80 overflow-y-auto bg-white border-r border-gray-200 p-4">
-        <MetricsPanel metrics={metrics} />
+        <MetricsPanel metrics={{
+          precision: metrics.hotspotPrecision,
+          recall: metrics.hotspotRecall,
+          ingestAlertP50: metrics.ingestToAlertLatencyP50,
+          ingestAlertP95: metrics.ingestToAlertLatencyP95,
+          coverage: { percentage: metrics.districtCoverage * 100 },
+          avgRadiance: metrics.avgRadiance,
+          maxRadiance: metrics.maxRadiance,
+          timestamp: metrics.timestamp
+        }} />
       </div>
       
       {/* Map Container */}

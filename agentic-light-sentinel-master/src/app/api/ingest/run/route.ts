@@ -15,7 +15,7 @@ export async function POST() {
         phase: 'SENSE' as any,
         message: 'Scheduled data collection complete',
         at: now,
-        meta: { duration: 250 + Math.floor(Math.random() * 200), count: sources.length },
+        meta: JSON.stringify({ duration: 250 + Math.floor(Math.random() * 200), count: sources.length }),
       },
     }),
     ...sources.map((s) =>

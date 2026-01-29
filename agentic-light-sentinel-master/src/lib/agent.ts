@@ -117,8 +117,9 @@ export const agent = {
           continue;
         }
 
-        // Convert Float[] to [number, number, number, number] 
-        const bbox = d.bbox as [number, number, number, number];
+        // Parse bbox string to number array
+        const bboxParsed = typeof d.bbox === 'string' ? JSON.parse(d.bbox) : d.bbox;
+        const bbox = bboxParsed as [number, number, number, number];
         await runAgentForDistrict(d.code, bbox, new Date().getFullYear());
       }
       lastRun.sense = now;
@@ -151,8 +152,9 @@ export const agent = {
             delta > AGENT_CONFIG.thresholds.delta) {
           if (!d.bbox || d.bbox.length !== 4) continue;
           
-          // Generate a random point within the district's bbox
-          const [west, south, east, north] = d.bbox;
+          // Parse bbox string and generate a random point within the district's bbox
+          const bboxParsed = typeof d.bbox === 'string' ? JSON.parse(d.bbox) : d.bbox;
+          const [west, south, east, north] = bboxParsed as [number, number, number, number];
           const lat = south + Math.random() * (north - south);
           const lng = west + Math.random() * (east - west);
 
@@ -193,6 +195,9 @@ export const agent = {
       });
 
       for (const h of hotspots) {
+        // Skip if no contact email
+        if (!h.district.contactEmail) continue;
+        
         await sendMail({
           to: h.district.contactEmail,
           subject: `Light Pollution Alert: ${h.severity} severity in ${h.district.name}`,

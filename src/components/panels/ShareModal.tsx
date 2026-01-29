@@ -112,7 +112,7 @@ export function ShareModal({
 
         {/* Share Buttons */}
         <div className="grid grid-cols-2 gap-4">
-          {navigator.share && (
+          {'share' in navigator && (
             <button
               onClick={() => handleShare('native')}
               className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-50 transition-colors"

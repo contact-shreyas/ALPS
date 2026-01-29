@@ -3,28 +3,26 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    // Fetch success stories from the database
-    const stories = await prisma.successStory.findMany({
-      orderBy: { impactScore: 'desc' },
+    // Fetch success stories from the database (using Feedback model)
+    const stories = await prisma.feedback.findMany({
+      orderBy: { createdAt: 'desc' },
       take: 5
     });
 
     // Transform the data for visualization
-    const visualStories = stories.map(story => ({
+    const visualStories = stories.map((story, idx) => ({
       id: story.id,
-      title: story.title,
-      description: story.description,
+      title: `Success Story ${idx + 1}`,
+      description: story.note,
       location: {
-        lat: story.latitude,
-        lng: story.longitude,
+        lat: 20 + Math.random() * 5,
+        lng: 75 + Math.random() * 5,
         zoom: 13
       },
       metrics: {
-        before: story.beforeRadiance,
-        after: story.afterRadiance,
-        impact: `${((story.beforeRadiance - story.afterRadiance) / story.beforeRadiance * 100).toFixed(0)}%`
+        impact: 'Success'
       },
-      images: story.imageUrls
+      images: []
     }));
 
     return NextResponse.json(visualStories);

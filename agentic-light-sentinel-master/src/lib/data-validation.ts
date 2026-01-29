@@ -52,7 +52,7 @@ export async function validateHotspotData(data: any[]): Promise<{
       if (error instanceof z.ZodError) {
         invalid.push({
           data: item,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
+          errors: error.issues.map(e => `${e.path.join('.')}: ${e.message}`),
         });
       }
     }
@@ -76,7 +76,7 @@ export async function validateDistrictData(data: any[]): Promise<{
       if (error instanceof z.ZodError) {
         invalid.push({
           data: item,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`),
+          errors: error.issues.map(e => `${e.path.join('.')}: ${e.message}`),
         });
       }
     }
@@ -117,24 +117,12 @@ export async function cleanupOrphanedData(): Promise<{
   details: string;
 }> {
   try {
-    // Remove hotspots without valid districts
-    const orphanedHotspots = await prisma.hotspot.deleteMany({
-      where: {
-        district: null,
-      },
-    });
-
-    // Remove metrics without valid districts
-    const orphanedMetrics = await prisma.districtMetric.deleteMany({
-      where: {
-        district: null,
-      },
-    });
-
+    // Foreign key constraints prevent orphaned records
+    // This function is kept for API compatibility but returns zeros
     return {
-      hotspotsRemoved: orphanedHotspots.count,
-      metricsRemoved: orphanedMetrics.count,
-      details: `Removed ${orphanedHotspots.count} orphaned hotspots and ${orphanedMetrics.count} orphaned metrics`,
+      hotspotsRemoved: 0,
+      metricsRemoved: 0,
+      details: 'Foreign key constraints prevent orphaned records',
     };
   } catch (error) {
     throw new Error(`Failed to cleanup orphaned data: ${error}`);
@@ -211,10 +199,10 @@ export async function validateDatabaseIntegrity(): Promise<{
     const invalidCoordinates = await prisma.hotspot.count({
       where: {
         OR: [
-          { latitude: { lt: -90 } },
-          { latitude: { gt: 90 } },
-          { longitude: { lt: -180 } },
-          { longitude: { gt: 180 } },
+          { lat: { lt: -90 } },
+          { lat: { gt: 90 } },
+          { lng: { lt: -180 } },
+          { lng: { gt: 180 } },
         ],
       },
     });

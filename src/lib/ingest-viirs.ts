@@ -50,7 +50,6 @@ async function processBlackMarbleData(buffer: Buffer, date: Date) {
           hotspots: 2,
         }
       ],
-      skipDuplicates: true,
     });
 
     return true;

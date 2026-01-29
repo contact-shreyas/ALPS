@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { calculateMetrics } from '@/lib/metrics';
 
 const prisma = new PrismaClient();
 
@@ -52,14 +51,14 @@ export async function GET() {
 
     // Get district coverage
     const totalDistricts = await prisma.district.count();
-    const districtsWithData = await prisma.districtDailyMetric.count({
+    const districtsWithData = (await prisma.districtDailyMetric.groupBy({
+      by: ['code'] as const,
       where: {
         createdAt: {
           gte: thirtyDaysAgo
         }
-      },
-      distinct: ['districtId']
-    });
+      }
+    })).length;
 
     return NextResponse.json({
       metrics: {

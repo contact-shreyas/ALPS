@@ -57,12 +57,14 @@ export async function updateMetrics() {
 
     // Calculate district coverage
     const totalDistricts = await prisma.district.count();
-    const districtsWithData = await prisma.districtDailyMetric.count({
+    const districtsWithDataRecords = await prisma.districtDailyMetric.findMany({
       where: {
         createdAt: { gte: thirtyDaysAgo }
       },
-      distinct: ['districtId']
+      distinct: ['code'],
+      select: { code: true }
     });
+    const districtsWithData = districtsWithDataRecords.length;
 
     const coverage = calculateCoverageMetrics(districtsWithData, totalDistricts);
 

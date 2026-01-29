@@ -35,7 +35,7 @@ export function AutonomousLoopPanel() {
     if (type === 'act') {
       return `Queue: ${component.queueLength} items`;
     }
-    return component.lastRun 
+    return ('lastRun' in component && component.lastRun)
       ? <>Last run: <TimeDisplay timestamp={component.lastRun} /></>
       : 'Waiting...';
   };

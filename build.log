@@ -1,0 +1,49 @@
+﻿
+> infinity-loop@0.1.0 build C:\transfer\agentic-light-sentinel-master
+> next build
+
+  Γû▓ Next.js 14.2.15
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+
+./src/components/dashboard/sustainability/SustainabilityDashboard.tsx
+23:6  Warning: React Hook useEffect has a missing dependency: 'fetchImpactData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/map/DynamicMap.tsx
+93:8  Warning: React Hook useEffect has a missing dependency: 'opacity'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/map/MeasurementTools.tsx
+166:6  Warning: React Hook useEffect has an unnecessary dependency: 'updateMeasurement'. Either exclude it or remove the dependency array. Outer scope values like 'updateMeasurement' aren't valid dependencies because mutating them doesn't re-render the component.  react-hooks/exhaustive-deps
+
+./src/components/visualization/StorytellingVisualization.tsx
+122:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/hooks/useMapData.ts
+79:6  Warning: React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/lib/security.ts
+280:1  Warning: Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+node.exe : Failed to compile.
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to compile.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+./src/app/api/act/notify/route.ts:16:7
+Type error: Type '{ alertId: string | undefined; to: string; }' is not assignable to type 'string'.
+
+[0m [90m 14 |[39m       phase[33m:[39m [32m'ACT'[39m [36mas[39m any[33m,[39m[0m
+[0m [90m 15 |[39m       message[33m:[39m [32m`email queued to ${to}`[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 16 |[39m       meta[33m:[39m { alertId[33m,[39m to }[33m,[39m[0m
+[0m [90m    |[39m       [31m[1m^[22m[39m[0m
+[0m [90m 17 |[39m     }[33m,[39m[0m
+[0m [90m 18 |[39m   })[0m
+[0m [90m 19 |[39m[0m
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

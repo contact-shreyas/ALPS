@@ -200,7 +200,15 @@ async function fetchLightPollutionData(includeHotspots: boolean, includeHistoric
  * Generate demo data for visualization when no real data is available
  */
 function generateDemoData() {
-  const demoPoints = [];
+  const demoPoints: Array<{
+    id: string;
+    latitude: number;
+    longitude: number;
+    brightness: number;
+    timestamp: string;
+    district: string;
+    type: string;
+  }> = [];
   const now = new Date();
   
   // Major Indian cities with realistic light pollution data

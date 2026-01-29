@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     data: {
       phase: 'ACT' as any,
       message: `email queued to ${to}`,
-      meta: { alertId, to },
+      meta: JSON.stringify({ alertId, to }),
     },
   })
 

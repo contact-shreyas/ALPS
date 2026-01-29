@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loopState } from "../loop/route";
+import { loopState } from "@/lib/loop-state";
 import { prisma } from "@/lib/prisma";
 
 let threshold_nW = 8; // example global threshold (demo)

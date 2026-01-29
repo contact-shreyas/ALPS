@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       include: {
         districts: {
           include: {
-            dailyMetrics: {
+            daily: {
               orderBy: { date: 'desc' },
               take: 30,
             },
@@ -37,17 +37,17 @@ export async function GET(request: Request) {
       type,
       metrics: {
         totalHotspots: state.districts.reduce((sum, d) => 
-          sum + (d.dailyMetrics[0]?.hotspots || 0), 0),
+          sum + (d.daily[0]?.hotspots || 0), 0),
         avgRadiance: state.districts.reduce((sum, d) => 
-          sum + (d.dailyMetrics[0]?.radiance || 0), 0) / state.districts.length,
+          sum + (d.daily[0]?.radiance || 0), 0) / state.districts.length,
         districtsWithAlerts: state.districts.filter(d => 
-          d.dailyMetrics[0]?.hotspots > 0).length,
+          d.daily[0]?.hotspots > 0).length,
       },
       districts: type === 'detailed' ? state.districts.map(d => ({
         name: d.name,
-        currentRadiance: d.dailyMetrics[0]?.radiance || 0,
-        hotspots: d.dailyMetrics[0]?.hotspots || 0,
-        trend: d.dailyMetrics.slice(0, 7).map(m => m.radiance),
+        currentRadiance: d.daily[0]?.radiance || 0,
+        hotspots: d.daily[0]?.hotspots || 0,
+        trend: d.daily.slice(0, 7).map(m => m.radiance),
       })) : undefined,
     };
 

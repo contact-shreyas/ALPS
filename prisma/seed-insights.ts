@@ -60,7 +60,7 @@ export function buildSeedData(seed = Number(process.env.INSIGHTS_SEED ?? 42)) {
     name: string
     region: string
     sourceId: string
-    tags: Record<string, unknown>
+    tags: string
   }> = []
 
   let eid = 0
@@ -132,7 +132,7 @@ export function buildSeedData(seed = Number(process.env.INSIGHTS_SEED ?? 42)) {
       phase,
       message,
       at,
-      meta: { duration: Math.floor(randRange(rng, 100, 2000)), status: pick(rng, ['success', 'warning', 'error'] as const), count: Math.floor(randRange(rng, 1, 1000)) },
+      meta: JSON.stringify({ duration: Math.floor(randRange(rng, 100, 2000)), status: pick(rng, ['success', 'warning', 'error'] as const), count: Math.floor(randRange(rng, 1, 1000)) }),
     }
   })
 

@@ -108,8 +108,8 @@ export function AlertsTable() {
                   <div className="font-medium text-gray-900 dark:text-gray-100">{a.title}</div>
                   <div className="text-gray-500 text-xs">{a.details}</div>
                 </td>
-                <td className="py-2 pr-4">{a.entity.code}</td>
-                <td className="py-2 pr-4">{a.entity.region}</td>
+                <td className="py-2 pr-4">{a.entity?.code || '-'}</td>
+                <td className="py-2 pr-4">{a.entity?.region || '-'}</td>
                 <td className="py-2 pr-4">{formatters.timestamp(a.createdAt)}</td>
                 <td className="py-2 pr-4">
                   <button

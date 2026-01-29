@@ -48,7 +48,14 @@ export function useSettings() {
     settings,
     isLoading,
     error,
-    saveSettings: mutation.mutate,
+    saveSettings: async (data: Partial<SettingsData>) => {
+      return new Promise<void>((resolve, reject) => {
+        mutation.mutate(data, {
+          onSuccess: () => resolve(),
+          onError: (err) => reject(err),
+        });
+      });
+    },
     isSaving: mutation.isPending,
   };
 }

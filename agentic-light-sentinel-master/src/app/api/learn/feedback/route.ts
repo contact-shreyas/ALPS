@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   const json = await request.json().catch(() => ({}))
   const { alertId, outcome, note } = bodySchema.parse(json)
 
-  await prisma.event.create({ data: { phase: 'LEARN' as any, message: `Feedback: ${outcome}`, meta: { alertId, note } } })
+  await prisma.event.create({ data: { phase: 'LEARN' as any, message: `Feedback: ${outcome}`, meta: JSON.stringify({ alertId, note }) } })
   return NextResponse.json(responseSchema.parse({ ok: true }))
 }
 

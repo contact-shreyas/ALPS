@@ -65,7 +65,16 @@ export default function Home() {
       
       {/* Dashboard Overlay */}
       <div className="absolute top-4 left-4 z-[1000] w-80">
-        <MetricsPanel metrics={metrics} />
+        <MetricsPanel metrics={{
+          precision: metrics.hotspotPrecision,
+          recall: metrics.hotspotRecall,
+          ingestAlertP50: metrics.ingestToAlertLatencyP50,
+          ingestAlertP95: metrics.ingestToAlertLatencyP95,
+          coverage: { percentage: metrics.districtCoverage * 100 },
+          avgRadiance: metrics.avgRadiance,
+          maxRadiance: metrics.maxRadiance,
+          timestamp: metrics.timestamp
+        }} />
       </div>
     </div>
   );

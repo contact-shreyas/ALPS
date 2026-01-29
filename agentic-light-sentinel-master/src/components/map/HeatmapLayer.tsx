@@ -44,7 +44,7 @@ export function HeatmapLayer({ data, colorScale }: HeatmapLayerProps) {
     ] as [number, number, number]);
 
     const maxRadiance = Math.max(...data.map(d => d.radiance));
-    const gradient = {};
+    const gradient: Record<number, string> = {};
     for (let i = 0; i <= 1; i += 0.1) {
       gradient[i] = colorScale(maxRadiance * i);
     }

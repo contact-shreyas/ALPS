@@ -52,7 +52,7 @@ export async function POST() {
 
   if (ops.length) await prisma.$transaction(ops)
 
-  await prisma.event.create({ data: { phase: 'REASON' as any, message: 'Anomaly detection completed', meta: { alertsRaised } } })
+  await prisma.event.create({ data: { phase: 'REASON' as any, message: 'Anomaly detection completed', meta: JSON.stringify({ alertsRaised }) } })
 
   const payload = responseSchema.parse({ ok: true, alertsRaised })
   return NextResponse.json(payload)

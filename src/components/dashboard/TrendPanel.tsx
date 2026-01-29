@@ -117,8 +117,8 @@ export function TrendPanel() {
                 contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '0.375rem' }}
                 labelStyle={{ color: '#e5e7eb' }}
                 itemStyle={{ color: '#e5e7eb' }}
-                labelFormatter={(label: string) => formatDate(new Date(label))}
-                formatter={(value: number) => [value.toLocaleString(), 'Hotspots']}
+                labelFormatter={(label) => formatDate(new Date(String(label)))}
+                formatter={(value) => [Number(value).toLocaleString(), 'Hotspots']}
               />
               <Line
                 type="monotone"

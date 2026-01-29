@@ -40,7 +40,7 @@ export const BASEMAPS = {
 };
 
 // Initial map view settings
-export const DEFAULT_CENTER = [20.5937, 78.9629]; // Center of India
+export const DEFAULT_CENTER: [number, number] = [20.5937, 78.9629]; // Center of India
 export const DEFAULT_ZOOM = 5;
 export const MAX_ZOOM = 16;
 export const MIN_ZOOM = 2;

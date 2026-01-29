@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   if (!q) return NextResponse.json([]);
 
   const rows = await prisma.district.findMany({
-    where: { name: { contains: q, mode: "insensitive" } },
+    where: { name: { contains: q } },
     select: { code: true, name: true, stateCode: true },
     take: 20,
   });

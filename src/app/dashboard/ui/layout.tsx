@@ -6,7 +6,8 @@ import { ActionPanel } from "@/components/dashboard/ActionPanel";
 import { AutonomousLoopPanel } from "@/components/dashboard/AutonomousLoopPanel";
 import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 import { ThemeProvider } from "@/lib/theme-context";
-import { ToastProvider, useToast } from "@/components/ui/Toast";
+import { ToastProvider } from "@/components/ui/Toast";
+import { useToast } from "@/components/ui/use-toast";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
@@ -31,7 +32,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     nationalTrend: Array<{ date: string; value: number }>;
   };
 
+  type PanelMetrics = {
+    precision: number;
+    recall: number;
+    ingestAlertP50: number;
+    ingestAlertP95: number;
+    coverage: { percentage: number };
+    timestamp?: string;
+  };
+
   const [metrics, setMetrics] = useState<MetricSummary | null>(null);
+  const [panelMetrics, setPanelMetrics] = useState<PanelMetrics | null>(null);
   const [insights, setInsights] = useState<Insights | null>(null);
 
   // Fetch metrics and insights
@@ -41,11 +52,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       fetch("/api/insights").then(r => r.json())
     ]).then(([metricsData, insightsData]) => {
       setMetrics(metricsData);
+      // Transform metrics for panel
+      if (metricsData) {
+        setPanelMetrics({
+          precision: metricsData.hotspotPrecision,
+          recall: metricsData.hotspotRecall,
+          ingestAlertP50: metricsData.ingestToAlertLatencyP50,
+          ingestAlertP95: metricsData.ingestToAlertLatencyP95,
+          coverage: { percentage: metricsData.districtCoverage * 100 },
+          timestamp: metricsData.timestamp
+        });
+      }
       setInsights(insightsData);
     });
   }, []);
 
-  const { showToast } = useToast();
+  const { toast } = useToast();
   const [isSending, setIsSending] = useState(false);
 
   const sendReport = async () => {
@@ -53,9 +75,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     try {
       const response = await fetch("/api/email/report", { method: "POST" });
       if (!response.ok) throw new Error('Failed to send report');
-      showToast('Report sent successfully!', 'success');
+      toast({ title: 'Report sent successfully!', variant: 'default' });
     } catch (error) {
-      showToast('Failed to send report. Please try again.', 'error');
+      toast({ title: 'Failed to send report. Please try again.', variant: 'destructive' });
     } finally {
       setIsSending(false);
     }
@@ -107,7 +129,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="space-y-4">
           <AutonomousLoopPanel />
           <ActionPanel />
-          {metrics && <MetricsPanel metrics={metrics} />}
+          {panelMetrics && <MetricsPanel metrics={panelMetrics} />}
           <AlertsPanel />
           {insights && insights.nationalTrend && (
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">

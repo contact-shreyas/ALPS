@@ -15,6 +15,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 export default function MapLibreMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const {
+    map,
     setMap,
     activeBasemap,
     activeLayers,
@@ -83,7 +84,6 @@ export default function MapLibreMap() {
 
   // Handle layer visibility and opacity changes
   useEffect(() => {
-    const map = maplibregl.Map.prototype.getMap(mapContainer.current);
     if (!map) return;
 
     Object.entries(LAYER_CONFIGS).forEach(([key, config]) => {
@@ -98,11 +98,10 @@ export default function MapLibreMap() {
         map.setPaintProperty(config.id, 'raster-opacity', layerOpacity[layerType]);
       }
     });
-  }, [activeLayers, layerOpacity]);
+  }, [map, activeLayers, layerOpacity]);
 
   // Handle color ramp changes
   useEffect(() => {
-    const map = maplibregl.Map.prototype.getMap(mapContainer.current);
     if (!map) return;
 
     Object.entries(LAYER_CONFIGS).forEach(([key, config]) => {
@@ -121,7 +120,7 @@ export default function MapLibreMap() {
         ...selectedRamp.stops.flat(),
       ]);
     });
-  }, [selectedColorRamp, colorBlindMode]);
+  }, [map, selectedColorRamp, colorBlindMode]);
 
   return (
     <div

@@ -59,11 +59,7 @@ export function StorytellingVisualization() {
 
   return (
     <div className="relative h-[80vh]">
-      <Map
-        center={[story.location.lat, story.location.lng]}
-        zoom={story.location.zoom}
-        className="w-full h-full"
-      />
+      <Map level="state" />
 
       <AnimatePresence mode="wait">
         <motion.div

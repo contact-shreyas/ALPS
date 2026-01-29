@@ -17,14 +17,11 @@ export async function POST(request: Request) {
     const data = feedbackSchema.parse(json);
 
     // Store feedback in database
-    await prisma.communityFeedback.create({
+    await prisma.feedback.create({
       data: {
-        type: data.type,
-        title: data.title,
-        description: data.description,
-        location: data.location,
-        impact: data.impact,
-        contact: data.contact || null
+        code: `COMM-${data.type.toUpperCase()}`,
+        note: `${data.title}: ${data.description} (${data.location})`,
+        rating: 0
       }
     });
 
@@ -34,9 +31,8 @@ export async function POST(request: Request) {
         data: {
           level: 'community',
           code: 'COMM-REPORT',
-          message: `Community Report: ${data.title}`,
-          severity: 5,
-          meta: { location: data.location }
+          message: `Community Report: ${data.title} - ${data.description}`,
+          severity: 5
         }
       });
     }

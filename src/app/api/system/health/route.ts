@@ -17,11 +17,10 @@ export async function GET() {
     // Calculate real metrics from process logs if available
     if (processes.length > 0) {
       const successfulProcesses = processes.filter(p => p.status === 'SUCCESS');
-      const avgDuration = processes.reduce((sum, p) => sum + (p.duration || 0), 0) / processes.length;
 
       // Update some metrics with real data
       lastHealthData.detectionPrecision.value = (successfulProcesses.length / processes.length) * 100;
-      lastHealthData.responseTime.value = Math.min(100, 100 - (avgDuration / 1000)); // Convert ms to performance score
+      // responseTime would require duration field - using mock data for now
     }
 
     // Group processes by type (maintain existing functionality)

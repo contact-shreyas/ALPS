@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { loopState } from "../loop/route";
+import { loopState } from "@/lib/loop-state";
 
 export async function GET() {
   // Coverage

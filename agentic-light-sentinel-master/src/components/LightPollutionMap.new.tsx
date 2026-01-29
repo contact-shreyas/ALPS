@@ -25,25 +25,22 @@ export function LightPollutionMap() {
   const [year, setYear] = useState<Year>(2024);
   const [opacity, setOpacity] = useState(0.7);
   const [zoom, setZoom] = useState(5);
-  const { data: mapData } = useMapData();
+  const mapData = useMapData();
 
   // Calculate map center
-  const center: LatLngExpression = useMemo(() => {
-    if (mapData?.center) {
-      return [mapData.center.lat, mapData.center.lng];
-    }
+  const center: [number, number] = useMemo(() => {
+    // Using default center for now since useMapData doesn't provide center
     return [20, 78]; // Default center (India)
-  }, [mapData?.center]);
+  }, []);
 
   return (
     <div className="relative w-full h-full">
       <DynamicMap
         center={center}
         zoom={zoom}
-        baseMap={baseMap}
-        year={year}
-        opacity={opacity}
-        onZoomChange={setZoom}
+        baseMapUrl="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        baseMapAttribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        overlayOpacity={opacity}
       />
 
       {/* Controls Panel */}

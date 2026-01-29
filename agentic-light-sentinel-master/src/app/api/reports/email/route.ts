@@ -207,7 +207,7 @@ function generateReportEmailHTML(data: any): string {
             ${districts.length > 0 ? `
             <h3>🏙️ District Details</h3>
             <div class="district-list">
-                ${districts.map(district => `
+                ${districts.map((district: any) => `
                 <div class="district-item">
                     <div>
                         <strong>${district.name}</strong><br>

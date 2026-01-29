@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authConfig } from '@/app/api/auth/[...nextauth]/route';
+import { authConfig } from '@/lib/auth-config';
 
 export async function auth() {
   return getServerSession(authConfig);

@@ -3,15 +3,18 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const regions = await prisma.region.findMany({
+    // Get unique regions from entities
+    const regionsData = await prisma.entity.findMany({
       select: {
-        id: true,
-        name: true,
+        region: true,
       },
+      distinct: ['region'],
       orderBy: {
-        name: 'asc',
+        region: 'asc',
       },
     });
+
+    const regions = regionsData.map(r => ({ id: r.region, name: r.region }));
 
     return NextResponse.json(regions);
   } catch (error) {

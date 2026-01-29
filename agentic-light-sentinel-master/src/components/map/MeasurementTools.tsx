@@ -6,7 +6,6 @@ import { useMap } from '@/contexts/MapContext';
 import { Button } from '@/components/ui/button';
 import * as turf from '@turf/turf';
 import { createCircleMode, createSquareMode } from '@/lib/draw-modes';
-import { MapboxDrawEvent } from '@mapbox/mapbox-gl-draw';
 import {
   MapPin,
   Circle,
@@ -39,6 +38,47 @@ export function MeasurementTools() {
   const [activeTool, setActiveTool] = useState<MeasurementType>('none');
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const drawRef = useRef<any>(null);
+
+  // Measurement calculation functions
+  const addCircleMeasurement = (feature: any) => {
+    const coords = feature.geometry.coordinates[0];
+    const center = turf.centerOfMass(feature);
+    const radius = turf.distance(
+      center,
+      turf.point(coords[0]),
+      { units: 'kilometers' }
+    );
+    const area = Math.PI * radius * radius;
+
+    setMeasurements(prev => [...prev, {
+      type: 'circle',
+      label: 'Circle',
+      value: `Area: ${area.toFixed(2)} km²\nRadius: ${radius.toFixed(2)} km`
+    }]);
+  };
+
+  const updateMeasurement = (feature: any) => {
+    // For now, just re-add the measurement
+    console.log('Feature updated:', feature);
+  };
+
+  const addSquareMeasurement = (feature: any) => {
+    const area = turf.area(feature) / 1_000_000; // km²
+    setMeasurements(prev => [...prev, {
+      type: 'square',
+      label: 'Square',
+      value: `Area: ${area.toFixed(2)} km²`
+    }]);
+  };
+
+  const addLineMeasurement = (feature: any) => {
+    const length = turf.length(feature, { units: 'kilometers' });
+    setMeasurements(prev => [...prev, {
+      type: 'line',
+      label: 'Line',
+      value: `Length: ${length.toFixed(2)} km`
+    }]);
+  };
 
   useEffect(() => {
     if (!map) return;
@@ -205,48 +245,6 @@ export function MeasurementTools() {
       type: 'point',
       label: 'Location',
       value: `${lngLat.lat.toFixed(6)}°N, ${lngLat.lng.toFixed(6)}°E`
-    }]);
-  };
-
-  const addCircleMeasurement = (feature: any) => {
-    const coords = feature.geometry.coordinates[0];
-    const center = turf.centerOfMass(feature);
-    const radius = turf.distance(
-      center,
-      turf.point(coords[0]),
-      { units: 'kilometers' }
-    );
-    const area = Math.PI * radius * radius;
-
-    setMeasurements([...measurements, {
-      type: 'circle',
-      label: 'Circle',
-      value: `Area: ${area.toFixed(2)} km²\nRadius: ${radius.toFixed(2)} km`
-    }]);
-  };
-
-  const addSquareMeasurement = (feature: any) => {
-    const area = turf.area(feature) / 1000000; // Convert to km²
-    const bounds = turf.bbox(feature);
-    const width = turf.distance(
-      turf.point([bounds[0], bounds[1]]),
-      turf.point([bounds[2], bounds[1]]),
-      { units: 'kilometers' }
-    );
-
-    setMeasurements([...measurements, {
-      type: 'square',
-      label: 'Square',
-      value: `Area: ${area.toFixed(2)} km²\nSide: ${width.toFixed(2)} km`
-    }]);
-  };
-
-  const addLineMeasurement = (feature: any) => {
-    const length = turf.length(feature, { units: 'kilometers' });
-    setMeasurements([...measurements, {
-      type: 'line',
-      label: 'Distance',
-      value: `${length.toFixed(2)} km`
     }]);
   };
 

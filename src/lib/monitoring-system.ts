@@ -5,6 +5,7 @@
 import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';
+// @ts-ignore - ws types may not be available
 import { WebSocketServer } from 'ws';
 import { performanceMonitor } from './performance-monitor';
 import { logger } from './error-handling';
@@ -45,7 +46,7 @@ class MonitoringSystem {
   async initialize(server: any): Promise<void> {
     this.wsServer = new WebSocketServer({ server, path: '/api/ws/monitoring' });
     
-    this.wsServer.on('connection', (ws) => {
+    this.wsServer.on('connection', (ws: any) => {
       this.clients.add(ws);
       logger.info('New monitoring client connected', 'monitoring');
       
@@ -60,7 +61,7 @@ class MonitoringSystem {
         logger.info('Monitoring client disconnected', 'monitoring');
       });
 
-      ws.on('error', (error) => {
+      ws.on('error', (error: any) => {
         logger.error('WebSocket error', error, 'monitoring');
         this.clients.delete(ws);
       });
@@ -166,7 +167,12 @@ class MonitoringSystem {
     message: string;
     timestamp: number;
   }> {
-    const alerts = [];
+    const alerts: Array<{
+      id: string;
+      severity: 'low' | 'medium' | 'high' | 'critical';
+      message: string;
+      timestamp: number;
+    }> = [];
     const latest = this.getLatestMetrics();
     
     if (!latest) return alerts;

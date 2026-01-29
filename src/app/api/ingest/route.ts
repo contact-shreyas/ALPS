@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { loopState } from "../loop/route";
+import { loopState } from "@/lib/loop-state";
 
 export async function POST() {
   loopState.incQueue();
